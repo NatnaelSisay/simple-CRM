@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
     sideNav: {
         backgroundColor: "#3f51b5",
-        height: "100vh",
+        minHeight: "100vh",
         borderRadius: "10px",
         color: "white",
     },
@@ -102,6 +102,7 @@ const links = [
         name: "Dash Board",
         to: "/",
         icon: <DashboardIcon />,
+        active: true,
     },
     {
         name: "Charts",
@@ -140,7 +141,12 @@ export default function Navigation() {
                     <Divider />
                     {links.map((link, index) => {
                         return (
-                            <div className={`${classes.listItems}`}>
+                            <div
+                                className={`${classes.listItems} ${
+                                    link.active ? classes.activeLink : null
+                                }`}
+                                key={index}
+                            >
                                 <ListItem
                                     className={`${classes.listContainer}]`}
                                 >
@@ -178,6 +184,10 @@ export default function Navigation() {
                         </div>
                     </Toolbar>
                 </AppBar>
+
+                <div>
+                    <h1>Check</h1>
+                </div>
             </div>
         </div>
     );
