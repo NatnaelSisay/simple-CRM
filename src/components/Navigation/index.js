@@ -12,6 +12,14 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 
+import WcTwoToneIcon from "@material-ui/icons/WcTwoTone";
+import PersonIcon from "@material-ui/icons/Person";
+import PregnantWomanIcon from "@material-ui/icons/PregnantWoman";
+import SwapVertTwoToneIcon from "@material-ui/icons/SwapVertTwoTone";
+
+// components
+import SmallCard from "../SmallCard";
+
 import {
     Divider,
     List,
@@ -80,6 +88,15 @@ const useStyles = makeStyles((theme) => ({
             color: "black",
             borderRadius: "10px 0px 0px 10px",
         },
+    },
+
+    // small card
+    smallCardContainer: {
+        marginTop: "1rem",
+        marginBottom: "1rem",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr 1fr",
+        gap: "2rem",
     },
 
     sectionDesktop: {
@@ -185,8 +202,27 @@ export default function Navigation() {
                     </Toolbar>
                 </AppBar>
 
-                <div>
-                    <h1>Check</h1>
+                <div className={classes.smallCardContainer}>
+                    <SmallCard
+                        header="15"
+                        subTitle="Employees"
+                        icon={<WcTwoToneIcon />}
+                    />
+                    <SmallCard
+                        header="10"
+                        subTitle="Male"
+                        icon={<PersonIcon />}
+                    />
+                    <SmallCard
+                        header="5"
+                        subTitle="Female"
+                        icon={<PregnantWomanIcon />}
+                    />
+                    <SmallCard
+                        header="9"
+                        subTitle="Active"
+                        icon={<SwapVertTwoToneIcon />}
+                    />
                 </div>
             </div>
         </div>
