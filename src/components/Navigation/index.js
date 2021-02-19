@@ -19,6 +19,7 @@ import SwapVertTwoToneIcon from "@material-ui/icons/SwapVertTwoTone";
 
 // components
 import SmallCard from "../SmallCard";
+import EmployeeTable from "../EmployeeTable";
 
 import {
     Divider,
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
     sideNav: {
         backgroundColor: "#3f51b5",
-        minHeight: "100vh",
+        minHeight: "97vh",
         borderRadius: "10px",
         color: "white",
     },
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     activeLink: {
-        backgroundColor: "white",
+        backgroundColor: "#f7f2ff",
         color: "black",
         borderRadius: "10px 0px 0px 10px",
     },
@@ -223,6 +224,9 @@ export default function Navigation() {
                         subTitle="Active"
                         icon={<SwapVertTwoToneIcon />}
                     />
+                </div>
+                <div>
+                    <EmployeeTable />
                 </div>
             </div>
         </div>
