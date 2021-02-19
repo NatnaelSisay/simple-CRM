@@ -6,12 +6,20 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+
+import SettingsIcon from "@material-ui/icons/Settings";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import AssessmentIcon from "@material-ui/icons/Assessment";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+
 import {
     Divider,
     List,
     ListItem,
     ListItemText,
+    ListItemIcon,
     Typography,
+    Icon,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +97,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const links = [
+    {
+        name: "Dash Board",
+        to: "/",
+        icon: <DashboardIcon />,
+    },
+    {
+        name: "Charts",
+        to: "/",
+        icon: <AssessmentIcon />,
+    },
+    {
+        name: "Employee",
+        to: "/",
+        icon: <SupervisorAccountIcon />,
+    },
+    {
+        name: "Setting",
+        to: "/",
+        icon: <SettingsIcon />,
+    },
+];
+
 export default function Navigation() {
     const classes = useStyles();
 
@@ -107,31 +138,20 @@ export default function Navigation() {
                         <ListItemText primary={"Main Menu"} />
                     </ListItem>
                     <Divider />
-                    <div className={`${classes.listItems}`}>
-                        <ListItem className={`${classes.listContainer}]`}>
-                            <ListItemText primary={"DashBoad"} />
-                        </ListItem>
-                    </div>
-
-                    <div
-                        className={`${classes.listItems} ${classes.activeLink}`}
-                    >
-                        <ListItem className={`${classes.listContainer}]`}>
-                            <ListItemText primary={"Link"} />
-                        </ListItem>
-                    </div>
-
-                    <div className={`${classes.listItems}`}>
-                        <ListItem className={`${classes.listContainer}]`}>
-                            <ListItemText primary={"Link"} />
-                        </ListItem>
-                    </div>
-
-                    <div className={`${classes.listItems}`}>
-                        <ListItem className={`${classes.listContainer}]`}>
-                            <ListItemText primary={"Link"} />
-                        </ListItem>
-                    </div>
+                    {links.map((link, index) => {
+                        return (
+                            <div className={`${classes.listItems}`}>
+                                <ListItem
+                                    className={`${classes.listContainer}]`}
+                                >
+                                    <ListItemIcon color="inherit">
+                                        <Icon>{link.icon}</Icon>
+                                    </ListItemIcon>
+                                    <ListItemText primary={link.name} />
+                                </ListItem>
+                            </div>
+                        );
+                    })}
                 </List>
             </div>
 
