@@ -1,5 +1,10 @@
+import Navigation from "../Navigation";
 function App() {
-    return <div className="App">welome</div>;
+    return (
+        <div className="App">
+            <Navigation />
+        </div>
+    );
 }
 
 export default App;
