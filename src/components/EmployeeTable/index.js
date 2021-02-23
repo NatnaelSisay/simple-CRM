@@ -16,6 +16,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Edit from "@material-ui/icons/Edit";
 
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
@@ -159,11 +160,19 @@ const useToolbarStyles = makeStyles((theme) => ({
     title: {
         flex: "1 1 100%",
     },
+    twoButtons: {
+        display: "flex",
+        alignItems: "center",
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected } = props;
+    const { numSelected, selctedIndex } = props;
+
+    const handleClick = (button = "exit") => {
+        console.log(button, selctedIndex);
+    };
 
     return (
         <Toolbar
@@ -192,11 +201,26 @@ const EnhancedTableToolbar = (props) => {
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton aria-label="delete">
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
+                <div className={classes.twoButtons}>
+                    {numSelected == 1 && (
+                        <Tooltip title="Edit">
+                            <IconButton
+                                aria-label="edit"
+                                onClick={() => handleClick("Edit ")}
+                            >
+                                <Edit />
+                            </IconButton>
+                        </Tooltip>
+                    )}
+                    <Tooltip title="Delete">
+                        <IconButton
+                            aria-label="delete"
+                            onClick={() => handleClick("Delete ")}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </div>
             ) : (
                 <Tooltip title="Add Employee" placement="left">
                     <IconButton aria-label="Add Employee">
@@ -286,7 +310,10 @@ export default function EmployeeTable() {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    selctedIndex={selected}
+                />
                 <TableContainer className={classes.container}>
                     <Table
                         stickyHeader
