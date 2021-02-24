@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     sideNav: {
         backgroundColor: "#3f51b5",
         minHeight: "97vh",
-        borderRadius: "10px",
         color: "white",
     },
 

@@ -267,7 +267,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EmployeeTable() {
     const classes = useStyles();
     const [order, setOrder] = React.useState("asc");
-    const [orderBy, setOrderBy] = React.useState("calories");
+    const [orderBy, setOrderBy] = React.useState("name");
     const [selected, setSelected] = React.useState([]);
 
     const handleRequestSort = (event, property) => {
