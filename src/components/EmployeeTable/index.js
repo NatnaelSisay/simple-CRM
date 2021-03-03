@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -20,25 +20,10 @@ import Edit from "@material-ui/icons/Edit";
 
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
-function createData(name, sex, sallary) {
-    return { name, sex, sallary };
-}
-
-const rows = [
-    createData("Cupcake", 305, 3.7),
-    createData("Donut", 452, 25.0),
-    createData("Eclair", 262, 16.0),
-    createData("Frozen yoghurt", 159, 6.0),
-    createData("Gingerbread", 356, 16.0),
-    createData("Honeycomb", 408, 3.2),
-    createData("Ice cream sandwich", 237, 9.0),
-    createData("Jelly Bean", 375, 0.0),
-    createData("KitKat", 518, 26.0),
-    createData("Lollipop", 392, 0.2),
-    createData("Marshmallow", 318, 0),
-    createData("Nougat", 360, 19.0),
-    createData("Oreo", 437, 18.0),
-];
+// CONTEXT
+import { EmployeeContext } from "../../contexts/employeesContext";
+import { ModalContext } from "../../contexts/modalContext";
+import { Modal } from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -67,14 +52,10 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    {
-        id: "name",
-        numeric: false,
-        disablePadding: true,
-        label: "Full Name",
-    },
-    { id: "sex", numeric: false, disablePadding: true, label: "Sex" },
-    { id: "salary", numeric: true, disablePadding: false, label: "Sallary" },
+    { id: "name", numeric: false, disablePadding: true, label: "Full Name" },
+    { id: "sex", numeric: false, disablePadding: false, label: "Sex" },
+    { id: "sallary", numeric: true, disablePadding: false, label: "Sallary" },
+    { id: "active", numeric: true, disablePadding: true, label: "Status" },
 ];
 
 function EnhancedTableHead(props) {
@@ -168,10 +149,19 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, selctedIndex } = props;
+    const { selectedIndex, setSelectedIndex } = props;
+    const numSelected = selectedIndex.length;
+
+    const { toggle } = useContext(ModalContext);
+    const { deleteEmployee } = useContext(EmployeeContext);
 
     const handleClick = (button = "exit") => {
-        console.log(button, selctedIndex);
+        console.log(button, selectedIndex);
+    };
+    const handleDelete = () => {
+        console.log("Delete button clicked ", selectedIndex);
+        deleteEmployee(selectedIndex);
+        setSelectedIndex([]);
     };
 
     return (
@@ -215,14 +205,18 @@ const EnhancedTableToolbar = (props) => {
                     <Tooltip title="Delete">
                         <IconButton
                             aria-label="delete"
-                            onClick={() => handleClick("Delete ")}
+                            onClick={() => handleDelete()}
                         >
                             <DeleteIcon />
                         </IconButton>
                     </Tooltip>
                 </div>
             ) : (
-                <Tooltip title="Add Employee" placement="left">
+                <Tooltip
+                    title="Add Employee"
+                    placement="left"
+                    onClick={() => toggle()}
+                >
                     <IconButton aria-label="Add Employee">
                         <PersonAddIcon />
                     </IconButton>
@@ -233,7 +227,7 @@ const EnhancedTableToolbar = (props) => {
 };
 
 EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
+    selectedIndex: PropTypes.any.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -265,6 +259,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EmployeeTable() {
+    const { rows } = useContext(EmployeeContext);
+    // console.log("Context result => ", value);
     const classes = useStyles();
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("name");
@@ -278,7 +274,7 @@ export default function EmployeeTable() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = rows.map((n) => n.id);
             setSelected(newSelecteds);
             return;
         }
@@ -311,8 +307,8 @@ export default function EmployeeTable() {
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <EnhancedTableToolbar
-                    numSelected={selected.length}
-                    selctedIndex={selected}
+                    selectedIndex={selected}
+                    setSelectedIndex={setSelected}
                 />
                 <TableContainer className={classes.container}>
                     <Table
@@ -335,19 +331,19 @@ export default function EmployeeTable() {
                                 rows,
                                 getComparator(order, orderBy)
                             ).map((row, index) => {
-                                const isItemSelected = isSelected(row.name);
+                                const isItemSelected = isSelected(row.id);
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                 return (
                                     <TableRow
                                         hover
                                         onClick={(event) =>
-                                            handleClick(event, row.name)
+                                            handleClick(event, row.id)
                                         }
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.name}
+                                        key={row.id}
                                         selected={isItemSelected}
                                     >
                                         <TableCell padding="checkbox">
@@ -371,6 +367,9 @@ export default function EmployeeTable() {
                                         </TableCell>
                                         <TableCell align="right">
                                             {row.sallary}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {row.active ? "on" : "off"}
                                         </TableCell>
                                     </TableRow>
                                 );

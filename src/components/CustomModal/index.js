@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -12,6 +12,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 import TextField from "@material-ui/core/TextField";
+
+// CONTEXT
+import { ModalContext } from "../../contexts/modalContext";
+import { EmployeeContext } from "../../contexts/employeesContext";
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -44,39 +48,55 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomModal() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
+    const [name, setName] = useState("");
+    const [gender, setGender] = useState("");
+    const [sallary, setSallary] = useState(0);
 
-    const handleOpen = () => {
-        setOpen(true);
+    const { isOpen, toggle } = useContext(ModalContext);
+    const { addEmployee } = useContext(EmployeeContext);
+
+    const clearFields = () => {
+        setName("");
+        setGender("");
+        setSallary(0);
+    };
+    const haddleAddEmployee = () => {
+        const data = { name, sex: gender, sallary };
+        console.log(data);
+        addEmployee(data);
+        clearFields();
+        toggle();
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCancel = () => {
+        clearFields();
+        toggle();
     };
-
     return (
         <div>
-            {/* <button type="button" onClick={handleOpen}>
-                react-transition-group
-            </button> */}
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
-                open={open}
-                onClose={handleClose}
+                open={isOpen}
+                onClose={toggle}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
-                <Fade in={open}>
+                <Fade in={isOpen}>
                     <div className={classes.paper}>
                         <h2 id="transition-modal-title">{"Add | Edit"}</h2>
                         <div className={classes.inputFieldContainer}>
-                            <TextField variant="outlined" label="First Name" />
-                            <TextField variant="outlined" label="Last Name" />
+                            <TextField
+                                variant="outlined"
+                                label="Full Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            {/* <TextField variant="outlined" label="Last Name" /> */}
                         </div>
                         <div className={classes.inputFieldContainer}>
                             <FormControl>
@@ -87,16 +107,20 @@ export default function CustomModal() {
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     variant="outlined"
+                                    value={gender}
+                                    onChange={(e) => setGender(e.target.value)}
                                 >
-                                    <MenuItem value={"male"}>Male</MenuItem>
-                                    <MenuItem value={"female"}>Female</MenuItem>
+                                    <MenuItem value={"Male"}>Male</MenuItem>
+                                    <MenuItem value={"Female"}>Female</MenuItem>
                                 </Select>
                             </FormControl>
                             <TextField
-                                label="With normal TextField"
+                                label="Sallary"
                                 id="standard-end-adornment"
                                 variant="outlined"
                                 type="number"
+                                value={sallary}
+                                onChange={(e) => setSallary(e.target.value)}
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
@@ -110,11 +134,15 @@ export default function CustomModal() {
                             <Button
                                 color="secondary"
                                 variant="contained"
-                                onClick={() => handleClose()}
+                                onClick={() => handleCancel()}
                             >
                                 Cancel
                             </Button>
-                            <Button color="primary" variant="contained">
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                onClick={() => haddleAddEmployee()}
+                            >
                                 Add
                             </Button>
                         </div>

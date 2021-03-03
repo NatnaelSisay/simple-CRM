@@ -1,9 +1,16 @@
 import Dashboard from "../../screens/Dashboard";
 
+import EmployeeProvider from "../../contexts/employeesContext";
+import ModalProvider from "../../contexts/modalContext";
+
 function App() {
     return (
         <div className="App">
-            <Dashboard />
+            <EmployeeProvider>
+                <ModalProvider>
+                    <Dashboard />
+                </ModalProvider>
+            </EmployeeProvider>
         </div>
     );
 }
