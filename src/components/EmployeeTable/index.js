@@ -1,3 +1,13 @@
+/**
+ * MESSAGE FROM -> JAVA(me)
+ *
+ * Most of the comoplext logic in here are directly taken from
+ * material-ui.
+ *
+ * I  added tweaks so it works according to
+ * my buisnees logic and need.
+ */
+
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
@@ -23,13 +33,20 @@ import PersonAddIcon from "@material-ui/icons/PersonAdd";
 // CONTEXT
 import { EmployeeContext } from "../../contexts/employeesContext";
 import { ModalContext } from "../../contexts/modalContext";
-import { Modal } from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
+    let value1 = a[orderBy];
+    let value2 = b[orderBy];
+
+    if (orderBy == "sallary") {
+        value1 = parseInt(value1);
+        value2 = parseInt(value2);
+    }
+
+    if (value2 < value1) {
         return -1;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if (value2 > value1) {
         return 1;
     }
     return 0;
@@ -55,7 +72,7 @@ const headCells = [
     { id: "name", numeric: false, disablePadding: true, label: "Full Name" },
     { id: "sex", numeric: false, disablePadding: false, label: "Sex" },
     { id: "sallary", numeric: true, disablePadding: false, label: "Sallary" },
-    { id: "active", numeric: true, disablePadding: true, label: "Status" },
+    { id: "active", numeric: true, disablePadding: false, label: "Status" },
 ];
 
 function EnhancedTableHead(props) {
@@ -152,7 +169,7 @@ const EnhancedTableToolbar = (props) => {
     const { selectedIndex, setSelectedIndex } = props;
     const numSelected = selectedIndex.length;
 
-    const { toggle } = useContext(ModalContext);
+    const { toggle, setEmployeeIndex } = useContext(ModalContext);
     const { deleteEmployee } = useContext(EmployeeContext);
 
     const handleClick = (button = "exit") => {
@@ -161,6 +178,16 @@ const EnhancedTableToolbar = (props) => {
     const handleDelete = () => {
         console.log("Delete button clicked ", selectedIndex);
         deleteEmployee(selectedIndex);
+        setSelectedIndex([]);
+    };
+
+    const handleEdit = () => {
+        // get the id i want to edit
+        // set the id of the modal employee
+        // open the modal
+        const employeeIndex = selectedIndex[0];
+        toggle();
+        setEmployeeIndex(employeeIndex);
         setSelectedIndex([]);
     };
 
@@ -196,7 +223,7 @@ const EnhancedTableToolbar = (props) => {
                         <Tooltip title="Edit">
                             <IconButton
                                 aria-label="edit"
-                                onClick={() => handleClick("Edit ")}
+                                onClick={() => handleEdit()}
                             >
                                 <Edit />
                             </IconButton>
@@ -233,9 +260,14 @@ EnhancedTableToolbar.propTypes = {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: "100%",
+        // marginRight: "3rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     paper: {
-        width: "100%",
+        width: "95%",
+
         marginBottom: theme.spacing(2),
     },
     table: {

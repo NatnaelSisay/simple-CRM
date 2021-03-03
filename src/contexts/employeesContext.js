@@ -11,6 +11,7 @@ const data = [
     createData(2, "Jemal Ahemed", "Male", 3.7),
     createData(3, "Alemlante Bayu", "Male", 25.0, true),
     createData(4, "Temesgen Awoke", "Male", 16.0),
+    createData(5, "Lemlem Batu", "Female", 2, true),
 ];
 
 function EmployeeProvider(props) {
@@ -27,19 +28,40 @@ function EmployeeProvider(props) {
     };
 
     const deleteEmployee = (employeeIds) => {
-        // console.log(employeeIds);
         if (!employeeIds) return;
 
         const newList = rows.filter(
             (employee) => employeeIds.indexOf(employee.id) == -1
         );
 
-        console.log(newList);
         setRows(newList);
     };
 
+    const getEmployee = (employeeId) => {
+        const employee = rows.find((employee) => employee.id == employeeId);
+        if (!employee) return null;
+        return employee;
+    };
+
+    const editEmployee = (modifiedEmployee) => {
+        const withoutEmployee = rows.filter(
+            (employee) => employee.id != modifiedEmployee.id
+        );
+        if (!withoutEmployee) return null;
+
+        const newEmployeeList = [...withoutEmployee, modifiedEmployee];
+        setRows(newEmployeeList);
+    };
     return (
-        <EmployeeContext.Provider value={{ rows, addEmployee, deleteEmployee }}>
+        <EmployeeContext.Provider
+            value={{
+                rows,
+                addEmployee,
+                deleteEmployee,
+                getEmployee,
+                editEmployee,
+            }}
+        >
             {props.children}
         </EmployeeContext.Provider>
     );
