@@ -1,54 +1,45 @@
 import React from "react";
-import { Card, Icon, makeStyles, Typography } from "@material-ui/core";
-import { AccountBalance } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core";
+
+import WcTwoToneIcon from "@material-ui/icons/WcTwoTone";
+import PersonIcon from "@material-ui/icons/Person";
+import PregnantWomanIcon from "@material-ui/icons/PregnantWoman";
+import SwapVertTwoToneIcon from "@material-ui/icons/SwapVertTwoTone";
+
+import SingleCard from "./SingleCard";
 
 const useStyles = makeStyles((theme) => ({
-    container: {
-        padding: "1rem 1rem",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderRadius: "10px",
-    },
-
-    icon: {
-        padding: "1rem",
-
-        backgroundColor: "lightgray",
-        borderRadius: "50%",
-
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
-    header: {
-        fontWeight: "bold",
-    },
-    subTitle: {
-        color: "#878685",
+    smallCardContainer: {
+        marginTop: "1rem",
+        marginBottom: "1rem",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr 1fr",
+        gap: "2rem",
     },
 }));
 
-function SmallCard({ header = "", subTitle = "", icon = <AccountBalance /> }) {
+const SmallCard = () => {
     const classes = useStyles();
     return (
-        <Card className={classes.container}>
-            <div>
-                <Typography variant="h5" className={classes.header}>
-                    {header}
-                </Typography>
-                <Typography variant="subtitle1" className={classes.subTitle}>
-                    {subTitle}
-                </Typography>
-            </div>
-            <div>
-                <Icon color="inherit" className={classes.icon}>
-                    {icon}
-                </Icon>
-            </div>
-        </Card>
+        <div className={classes.smallCardContainer}>
+            <SingleCard
+                header="15"
+                subTitle="Employees"
+                icon={<WcTwoToneIcon />}
+            />
+            <SingleCard header="10" subTitle="Male" icon={<PersonIcon />} />
+            <SingleCard
+                header="5"
+                subTitle="Female"
+                icon={<PregnantWomanIcon />}
+            />
+            <SingleCard
+                header="9"
+                subTitle="Active"
+                icon={<SwapVertTwoToneIcon />}
+            />
+        </div>
     );
-}
+};
 
 export default SmallCard;

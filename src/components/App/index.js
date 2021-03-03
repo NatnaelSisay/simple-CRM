@@ -1,11 +1,9 @@
-import Navigation from "../Navigation";
-import CustomModal from "../Modal";
+import Dashboard from "../../screens/Dashboard";
 
 function App() {
     return (
         <div className="App">
-            <Navigation />
-            <CustomModal />
+            <Dashboard />
         </div>
     );
 }
